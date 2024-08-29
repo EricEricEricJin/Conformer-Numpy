@@ -1,0 +1,66 @@
+
+### FF1
+encoder.layers.0.norm_feed_forward1.mod.weight (176,)
+encoder.layers.0.norm_feed_forward1.mod.bias (176,)
+
+onnx::MatMul_5484 (3520, 176)   # Linear 1 Weight
+encoder.layers.0.feed_forward1.linear1.bias (704,)
+
+onnx::MatMul_5496 (176, 704)    # Linear 2 Weight
+encoder.layers.0.feed_forward1.linear2.bias (176,)
+
+### MHA
+
+onnx::MatMul_5497 (704, 176)    # ??
+onnx::MatMul_5498 (176, 176)    # ??
+
+encoder.layers.0.norm_self_att.mod.weight (176,)
+encoder.layers.0.norm_self_att.mod.bias (176,)
+
+encoder.layers.0.self_attn.pos_bias_u (4, 44)
+encoder.layers.0.self_attn.pos_bias_v (4, 44)
+
+onnx::MatMul_5508 (176, 176)    # Wq 
+encoder.layers.0.self_attn.linear_q.bias (176,)
+
+onnx::MatMul_5509 (176, 176)    # Wk
+encoder.layers.0.self_attn.linear_k.bias (176,)
+
+onnx::MatMul_5510 (176, 176)    # Wv
+encoder.layers.0.self_attn.linear_v.bias (176,)
+
+onnx::MatMul_5569 (176, 176)    # Linear Out Weight
+encoder.layers.0.self_attn.linear_out.bias (176,)
+
+
+### CONV
+encoder.layers.0.norm_conv.mod.weight (176,)
+encoder.layers.0.norm_conv.mod.bias (176,)
+
+encoder.layers.0.conv.pointwise_conv1.weight (352, 176, 1)
+encoder.layers.0.conv.pointwise_conv1.bias (352,)
+
+encoder.layers.0.conv.depthwise_conv.weight (176, 1, 31)
+encoder.layers.0.conv.depthwise_conv.bias (176,)
+
+encoder.layers.0.conv.batch_norm.mod.weight (176,)
+encoder.layers.0.conv.batch_norm.mod.bias (176,)
+
+encoder.layers.0.conv.batch_norm.mod.running_mean (176,)
+encoder.layers.0.conv.batch_norm.mod.running_var (176,)
+
+encoder.layers.0.conv.pointwise_conv2.weight (176, 176, 1)
+encoder.layers.0.conv.pointwise_conv2.bias (176,)
+
+### FF2
+encoder.layers.0.norm_feed_forward2.mod.weight (176,)
+encoder.layers.0.norm_feed_forward2.mod.bias (176,)
+onnx::MatMul_5575 (176, 704)    # Linear 1 Weight
+encoder.layers.0.feed_forward2.linear1.bias (704,)
+onnx::MatMul_5576 (704, 176)    # Linear 2 Weight
+encoder.layers.0.feed_forward2.linear2.bias (176,)
+
+### LayerNorm
+encoder.layers.0.norm_out.mod.weight (176,)
+encoder.layers.0.norm_out.mod.bias (176,)
+
