@@ -1,22 +1,23 @@
+# pre encoder
+onnx::MatMul_5484 (3520, 176)   
 
 ### FF1
 encoder.layers.0.norm_feed_forward1.mod.weight (176,)
 encoder.layers.0.norm_feed_forward1.mod.bias (176,)
 
-onnx::MatMul_5484 (3520, 176)   # Linear 1 Weight
+onnx::MatMul_5496 (176, 704)    # Linear 1 Weight
 encoder.layers.0.feed_forward1.linear1.bias (704,)
 
-onnx::MatMul_5496 (176, 704)    # Linear 2 Weight
+onnx::MatMul_5497 (704, 176)    # Linear 2 Weight
 encoder.layers.0.feed_forward1.linear2.bias (176,)
 
 ### MHA
 
-onnx::MatMul_5497 (704, 176)    # ??
-onnx::MatMul_5498 (176, 176)    # ??
-
 encoder.layers.0.norm_self_att.mod.weight (176,)
 encoder.layers.0.norm_self_att.mod.bias (176,)
 
+onnx::MatMul_5498 (176, 176)    # positional encoding matrix
+                                # where is the large PET??? (9999, 176,)  
 encoder.layers.0.self_attn.pos_bias_u (4, 44)
 encoder.layers.0.self_attn.pos_bias_v (4, 44)
 

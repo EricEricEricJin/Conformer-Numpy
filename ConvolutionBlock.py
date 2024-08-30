@@ -4,7 +4,7 @@ import scipy.signal
 
 from layernorm import layernorm
 from batchnorm import batchnorm
-from sigmoid import sigmoid
+from activation import sigmoid
 
 class ConvolutionBlock:
     def __init__(self, beta, gamma, Wpt1, Bpt1, Wdp, Bdp, bn_beta, bn_gamma, bn_mean, bn_var, Wpt2, Bpt2) -> None:
@@ -59,7 +59,7 @@ class ConvolutionBlock:
         assert(y.shape == (x.shape[0], x.shape[1] - W.shape[2] + 1))
         return y
 
-    def call(self, x):
+    def __call__(self, x):
         res = x
         x = layernorm(x, self.beta, self.gamma)
         
@@ -115,6 +115,6 @@ if __name__ == "__main__":
     # print(beta.shape)
     conv = ConvolutionBlock(beta, gamma, Wpt1, Bpt1, Wdp, Bdp, bn_beta, bn_gamma, bn_mean, bn_var, Wpt2, Bpt2)
     x = np.random.random((166, 176))
-    y = conv.call(x)
+    y = conv(x)
     print(y.shape)
     print(y)

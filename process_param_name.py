@@ -17,7 +17,8 @@ for i in range(16):
     mm_dict[f"encoder.layers.{i}"]["feed_forward1.linear2.weight"] = next(mm_iter)
 
     # self attention
-    next(mm_iter)   # todo: What are the 16 mysteries matrices at the left side??
+    mm = next(mm_iter)   # todo: What are the 16 mysteries matrices at the left side??
+    print(mm)
 
     mm_dict[f"encoder.layers.{i}"]["self_attn.linear_q.weight"] = next(mm_iter)
     mm_dict[f"encoder.layers.{i}"]["self_attn.linear_k.weight"] = next(mm_iter)

@@ -1,5 +1,5 @@
 import numpy as np
-from sigmoid import sigmoid
+from activation import sigmoid
 from layernorm import layernorm
 
 class FeedForwardBlock:
