@@ -58,8 +58,7 @@ class MHABlock:
 
         out = np.matmul(att, self.Wo) + self.Bo
 
-        return x + out
-
+        return out
 
 if __name__ == "__main__":
     beta = np.load("param_nonquant/encoder.layers.0.norm_self_att.mod.bias.npy")
@@ -88,3 +87,4 @@ if __name__ == "__main__":
     x = np.random.random((166, 176))
     y = mha(x)
     print(y.shape)
+    print(y)

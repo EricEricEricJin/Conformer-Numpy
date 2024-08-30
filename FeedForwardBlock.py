@@ -13,8 +13,6 @@ class FeedForwardBlock:
 
 
     def __call__(self, x):
-        res = x
-
         x = layernorm(x, self.beta, self.gamma)
 
         # linear 1
@@ -26,7 +24,7 @@ class FeedForwardBlock:
         # linear 2
         x = np.matmul(x, self.W2) + self.B2
 
-        return x * 0.5 + res
+        return x * 0.5
 
 if __name__ == "__main__":
     beta = np.load("param_nonquant/encoder.layers.0.norm_feed_forward1.mod.bias.npy")

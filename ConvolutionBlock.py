@@ -60,7 +60,6 @@ class ConvolutionBlock:
         return y
 
     def __call__(self, x):
-        res = x
         x = layernorm(x, self.beta, self.gamma)
         
         # pointwise conv
@@ -88,7 +87,7 @@ class ConvolutionBlock:
         
         x = x.transpose()
                 
-        return x + res
+        return x
 
 
 if __name__ == "__main__":
