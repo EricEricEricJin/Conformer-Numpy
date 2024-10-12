@@ -1,5 +1,5 @@
-# Conformer-Numpy
+# ~~Conformer-Numpy~~ Conformer-Torch
 
-This project implements (on-going) Conformer model with numpy at a operator level. It aims to assist in making the hardware implementation of the inference of Conformer model by  
+This on-going project implements Conformer model with ~~numpy~~ pytorch at an operator level. It aims to assist in making the hardware implementation of the inference of this model by  
 - Enhance my understanding of this model
-- Generate intermediate input / output for unit testing of each block 
+- Generate intermediate input / output for unit testing of each hardware block 
