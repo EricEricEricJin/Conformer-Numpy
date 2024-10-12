@@ -16,6 +16,7 @@ encoder.layers.0.feed_forward1.linear2.bias (176,)
 encoder.layers.0.norm_self_att.mod.weight (176,)
 encoder.layers.0.norm_self_att.mod.bias (176,)
 
+# Wk
 onnx::MatMul_5498 (176, 176)    # positional encoding matrix
                                 # where is the large PET??? (9999, 176,)  
 encoder.layers.0.self_attn.pos_bias_u (4, 44)
@@ -24,10 +25,10 @@ encoder.layers.0.self_attn.pos_bias_v (4, 44)
 onnx::MatMul_5508 (176, 176)    # Wq 
 encoder.layers.0.self_attn.linear_q.bias (176,)
 
-onnx::MatMul_5509 (176, 176)    # Wk
+onnx::MatMul_5509 (176, 176)    # Wv
 encoder.layers.0.self_attn.linear_k.bias (176,)
 
-onnx::MatMul_5510 (176, 176)    # Wv
+onnx::MatMul_5510 (176, 176)    # PE
 encoder.layers.0.self_attn.linear_v.bias (176,)
 
 onnx::MatMul_5569 (176, 176)    # Linear Out Weight

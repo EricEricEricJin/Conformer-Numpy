@@ -71,9 +71,13 @@ class ConformerBlock:
 
     def __call__(self, x):
         x = x + self.FF1(x)
+        print("FF1", x)
         x = x + self.MHA(x)
+        print("MHA", x)
         x = x + self.CONV(x)
+        print("CONV", x)
         x = x + self.FF2(x)
+        print("FF2", x)
         return x
 
 if __name__ == "__main__":
@@ -86,4 +90,5 @@ if __name__ == "__main__":
     print(mm_dict)
     cb = ConformerBlock(prefix, layer, mm_dict["encoder.layers.0"])
     x = np.random.random((166, 176))
+    print("X =", x)
     print(cb(x).shape)
