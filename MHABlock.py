@@ -3,6 +3,7 @@
 import torch
 from torch import nn  
 # import numpy as np
+from my_layer_norm import my_layer_norm
 
 class MHABlock:
     def __init__(self, beta, gamma, Wq, Bq, Wk, Bk, Wv, Bv, pet, Wp, bias_u, bias_v, sqrt_d, Wo, Bo) -> None:
@@ -28,6 +29,9 @@ class MHABlock:
         self.Bo = Bo    
 
     def __call__(self, x):
+        # layer norm
+        x = my_layer_norm(x, self.gamma, self.beta)
+
         # Q, K, V
         
         HEAD = 4
@@ -36,37 +40,43 @@ class MHABlock:
 
         Q = (torch.matmul(x, self.Wq) + self.Bq).reshape((-1, HEAD, D_DIV_H))
         K = (torch.matmul(x, self.Wk) + self.Bk).reshape((-1, HEAD, D_DIV_H))
+        
         V = (torch.matmul(x, self.Wv) + self.Bv).reshape((-1, HEAD, D_DIV_H))        
+        # V is wrong?
 
         # PET slice
         pet = self.pet[(PET_LEN + 1) // 2 - len(x) : (PET_LEN - 1) // 2 + len(x)]
         P = torch.matmul(pet, self.Wp).reshape(-1, HEAD, D_DIV_H)
 
-        print("Q.shape", Q.shape)
-        print("bias_u.shape", self.bias_u.shape)
-        print("P.shape", P.shape)
+        print("Q =", Q)
+        print("bias_u =", self.bias_u)
+        print("P =", P)
 
         qk = torch.matmul((Q + self.bias_u).permute(1, 0, 2), K.permute(1, 2, 0))
         qp = torch.matmul((Q + self.bias_v).permute(1, 0, 2), P.permute(1, 2, 0))
         # slice qp
         qp = qp[:, :, : qk.shape[-1]]
 
+        # print("qk.shape", qk.shape)
+        # print("qp.shape", qp.shape)
+        # print("V.shape", V.shape)
+
+        print("qk =", qk)
+        print("qp =", qp)
+        print("V =", V)
+        # print("S(qk+qp) / sqrt(d) =", ((qk + qp) / self.sqrt_d))
+
+        # print("max qk =", qk.max())
         print("qk.shape", qk.shape)
         print("qp.shape", qp.shape)
         print("V.shape", V.shape)
 
-        print("V =", V)
-        print("qk =", qk)
-        print("qp =", qp)
-        print("S(qk+qp) / sqrt(d) =", ((qk + qp) / self.sqrt_d))
-
-        print("max qk =", qk.max())
 
         att = torch.matmul(nn.functional.softmax((qk + qp) / self.sqrt_d, dim=-1), V.permute(1, 0, 2))
         att = att.permute(1, 0, 2).reshape(-1, x.shape[-1])
 
-        print("v max =", V.max())
-        print("att max =", att.max())
+        # print("v max =", V.max())
+        # print("att max =", att.max())
 
         out = torch.matmul(att, self.Wo) + self.Bo
 

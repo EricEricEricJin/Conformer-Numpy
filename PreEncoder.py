@@ -32,19 +32,39 @@ class PreEncoder:
 
         # W: 176, 1, 3, 3
         x = x.unsqueeze(0).unsqueeze(0) # 1, 1, 663, 80
-        x = nn.functional.conv2d(x, self.Wconv1, bias=self.Bconv1, stride=[2, 2], padding=[1, 1, 1, 1])
+        print("after unsqueeze x.shape", x.shape)
+        x = nn.functional.conv2d(x, self.Wconv1, bias=self.Bconv1, stride=2, padding=1)
+        print("CONV 1.shape =", x.shape)
+        print("CONV 1", x)
 
         # relu
         x = nn.functional.relu(x)
+        print("RELU 1", x)
+        print(x.min(), x.max())
 
         # conv 2
         # W: 176, 176, 3, 3
         # x: 1, 176, 332, 40
-        x = nn.functional.conv2d(x, self.Wconv2, bias=self.Bconv2, stride=[2, 2], padding=[1, 1, 1, 1])
+        x = nn.functional.conv2d(x, self.Wconv2, bias=self.Bconv2, stride=2, padding=1)
+        print("CONV 2.shape =", x.shape)
+        print("CONV 2", x)
+        print(x.min(), x.max())
 
         # relu and reshape
         x = nn.functional.relu(x)
-        x = x.reshape() # todo
+        print("RELU 2", x)
+        print(x.min(), x.max())
+        
+        x_shape = x.shape
+        x = x.permute(0, 2, 1, 3)
+        x = x.reshape((x_shape[2], x_shape[0], -1))
+        x = x.squeeze()
+
+        # matmul and bias
+        x = torch.matmul(x, self.Wbig) + self.bias
+        x = x * self.scale
+
+        return x
 
 
 if __name__ == "__main__":
@@ -62,9 +82,6 @@ if __name__ == "__main__":
     bias = load_tensor_from_np("param_nonquant/encoder.pre_encode.out.bias.npy")
     scale = 13.266499519348145
 
-    x = load_tensor_from_np("feat_0.wav.npy")
-    x = x.squeeze().permute(1, 0)
-
     print("Wconv1.shape =", Wconv1.shape)
     print("Bconv1.shape =", Bconv1.shape)
     print("Wconv2.shape =", Wconv2.shape)
@@ -72,4 +89,19 @@ if __name__ == "__main__":
 
     print("Wbig.shape =", Wbig.shape)
     print("bias.shape =", bias.shape)
-    print("x.shape =", x.shape)
+
+    import prep_input
+    x = prep_input.compute_feat("test_wavs/0.wav")
+    x = torch.from_numpy(x)
+    print("feat =", x)
+    print("feat min =", x.min())
+    print("feat max =", x.max())
+    print("feat.shape", x.shape)
+
+    pe = PreEncoder(Wconv1, Bconv1, Wconv2, Bconv2, Wbig, bias, scale)
+    x = pe(x)
+
+    print("x =", x)
+    print(x.shape)
+
+    

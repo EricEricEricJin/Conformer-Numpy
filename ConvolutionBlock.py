@@ -1,6 +1,6 @@
 import torch 
 from torch import nn
-
+from my_layer_norm import my_layer_norm
 
 class ConvolutionBlock:
     def __init__(self, beta, gamma, Wpt1, Bpt1, Wdp, Bdp, bn_beta, bn_gamma, bn_mean, bn_var, Wpt2, Bpt2) -> None:
@@ -74,7 +74,8 @@ class ConvolutionBlock:
         return y
 
     def __call__(self, x):
-        x = nn.functional.layer_norm(x, self.beta.shape, weight=self.gamma, bias=self.beta)
+        # x = nn.functional.layer_norm(x, self.beta.shape, weight=self.gamma, bias=self.beta)
+        x = my_layer_norm(x, self.gamma, self.beta)
         
         # pointwise conv
         x = x.permute(1, 0)
@@ -89,16 +90,16 @@ class ConvolutionBlock:
         # padding
         # in: (176, 166)
         # out: (176, 196)
-        print("x.shape", x.shape)
+        # print("x.shape", x.shape)
         x = nn.functional.pad(x, (15, 15, 0, 0))
 
         # dp conv
-        print("before dp conv", x.max())
+        # print("before dp conv", x.max())
 
         x = self.conv_dp(x, self.Wdp, self.Bdp)
 
-        print("after dp conv", x.max())
-        print(f"BN mean = {self.bn_mean}, var = {self.bn_var}, weight = {self.bn_gamma}, bias = {bn_gamma}")
+        # print("after dp conv", x.max())
+        # print(f"BN mean = {self.bn_mean}, var = {self.bn_var}, weight = {self.bn_gamma}, bias = {self.bn_gamma}")
         # batch norm
         # x = batchnorm(x, self.bn_beta, self.bn_gamma, self.bn_mean, self.bn_var)
         x = nn.functional.batch_norm(x.permute(1, 0), running_mean=self.bn_mean, running_var=self.bn_var, 

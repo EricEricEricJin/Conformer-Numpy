@@ -1,5 +1,6 @@
 import torch 
 from torch import nn
+from my_layer_norm import my_layer_norm
 
 class FeedForwardBlock:
     def __init__(self, beta, gamma, W1, B1, W2, B2) -> None:
@@ -12,8 +13,11 @@ class FeedForwardBlock:
 
     def __call__(self, x):
         print(f"x.shape = {x.shape}, beta.shape = {self.beta.shape}, gamma.shape = {self.gamma.shape}")
-        x = nn.functional.layer_norm(x, self.beta.shape, weight=self.gamma, bias=self.beta)
-        print("norm_x =", x.max())
+
+        # x = nn.functional.layer_norm(x, self.beta.shape, weight=self.gamma, bias=self.beta)
+        print("before norm", x.min(), x.max())
+        x = my_layer_norm(x, self.gamma, self.beta)
+        print("norm_x", x.min(), x.max())
         
         # linear 1
         x = torch.matmul(x, self.W1) + self.B1
@@ -27,7 +31,8 @@ class FeedForwardBlock:
         x = torch.matmul(x, self.W2) + self.B2
         print("after mm2 x =", x.max())
 
-        return x * 0.5
+        x = x * 0.5
+        return x
 
 if __name__ == "__main__":
     import numpy as np
@@ -41,9 +46,10 @@ if __name__ == "__main__":
     W2 = torch.from_numpy(np.load("param_nonquant/onnx_MatMul_5497.npy"))
     B1 = torch.from_numpy(np.load("param_nonquant/encoder.layers.0.feed_forward1.linear1.bias.npy"))
     B2 = torch.from_numpy(np.load("param_nonquant/encoder.layers.0.feed_forward1.linear2.bias.npy"))
+    print("W1 =", W1)
 
     # print(beta.shape)
     ff = FeedForwardBlock(beta, gamma, W1, B1, W2, B2)
-    x = torch.rand((704, 176,))
+    x = torch.rand((704, 176,)) * 1000.0
     y = ff(x)
     print(y)
