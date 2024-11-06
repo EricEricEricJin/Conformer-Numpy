@@ -1,6 +1,8 @@
 import torch
 from torch import nn
 import os 
+import numpy as np
+import itertools
 
 from ConformerBlock import ConformerBlock
 from PreEncoder import PreEncoder
@@ -65,6 +67,16 @@ if __name__ == "__main__":
     x = compute_feat("test_wavs/0.wav")
     x = torch.from_numpy(x)
 
-    x = model(x)
-    print("final x =", x)
-    print("final x.shape =", x.shape)
+    output = model(x)
+    print("final output =", output)
+    print("final output.shape =", output.shape)
+
+    # validate it is log_probs
+    print(np.exp(output).sum(axis=-1).reshape(-1)[:10])
+
+    indexes = output.argmax(axis=-1)
+    print(indexes.shape)
+    indexes = indexes.squeeze().tolist()
+    unique_indexes = [k for k, _ in itertools.groupby(indexes)]
+    print(indexes)
+    print(unique_indexes)
