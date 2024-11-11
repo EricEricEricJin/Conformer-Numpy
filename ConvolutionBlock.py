@@ -76,6 +76,8 @@ class ConvolutionBlock:
     def __call__(self, x):
         # x = nn.functional.layer_norm(x, self.beta.shape, weight=self.gamma, bias=self.beta)
         x = my_layer_norm(x, self.gamma, self.beta)
+        # print("conv norm x =", x)
+        # exit()
         
         # pointwise conv
         x = x.permute(1, 0)

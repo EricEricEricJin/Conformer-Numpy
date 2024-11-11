@@ -31,6 +31,7 @@ class MHABlock:
     def __call__(self, x):
         # layer norm
         x = my_layer_norm(x, self.gamma, self.beta)
+        print("att norm x =", x)
 
         # Q, K, V
         
@@ -40,8 +41,8 @@ class MHABlock:
 
         Q = (torch.matmul(x, self.Wq) + self.Bq).reshape((-1, HEAD, D_DIV_H))
         K = (torch.matmul(x, self.Wk) + self.Bk).reshape((-1, HEAD, D_DIV_H))
-        
         V = (torch.matmul(x, self.Wv) + self.Bv).reshape((-1, HEAD, D_DIV_H))        
+        
         # V is wrong?
 
         # PET slice
@@ -49,7 +50,9 @@ class MHABlock:
         P = torch.matmul(pet, self.Wp).reshape(-1, HEAD, D_DIV_H)
 
         print("Q =", Q)
-        print("bias_u =", self.bias_u)
+        print("K =", K)
+        print("V =", V)
+        # print("bias_u =", self.bias_u)
         print("P =", P)
 
         qk = torch.matmul((Q + self.bias_u).permute(1, 0, 2), K.permute(1, 2, 0))
@@ -63,7 +66,6 @@ class MHABlock:
 
         print("qk =", qk)
         print("qp =", qp)
-        print("V =", V)
         # print("S(qk+qp) / sqrt(d) =", ((qk + qp) / self.sqrt_d))
 
         # print("max qk =", qk.max())

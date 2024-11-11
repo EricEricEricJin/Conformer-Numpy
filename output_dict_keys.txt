@@ -22,7 +22,7 @@ logprobs
 /pre_encode/conv/conv.0/Conv_output_0
 /pre_encode/conv/conv.1/Relu_output_0
 /pre_encode/conv/conv.2/Conv_output_0
-/pre_encode/conv/conv.1_1/Relu_output_0
+/pre_encode/conv/conv.1_1/Relu_output_0     OK!
 /pre_encode/Shape_output_0
 /pre_encode/Constant_7_output_0
 /pre_encode/Gather_output_0
@@ -38,12 +38,12 @@ onnx::Unsqueeze_691
 /pre_encode/Concat_output_0
 /pre_encode/Reshape_output_0
 /pre_encode/out/MatMul_output_0
-/pre_encode/out/Add_output_0
+/pre_encode/out/Add_output_0            OK!
 /Shape_output_0
 /Constant_output_0
 /Gather_output_0
 /pos_enc/Constant_output_0
-/pos_enc/Mul_output_0
+/pos_enc/Mul_output_0               OK!
 /pos_enc/Shape_output_0
 /pos_enc/Constant_1_output_0
 /pos_enc/Gather_output_0
@@ -145,7 +145,7 @@ onnx::Slice_772
 /layers.0/feed_forward1/linear2/Add_output_0
 /layers.0/Constant_output_0
 /layers.0/Mul_output_0
-/layers.0/Add_output_0
+/layers.0/Add_output_0                                  OK!
 /layers.0/norm_self_att/Cast_output_0
 /layers.0/norm_self_att/ReduceMean_output_0
 /layers.0/norm_self_att/Sub_output_0
@@ -157,7 +157,7 @@ onnx::Slice_772
 /layers.0/norm_self_att/Sqrt_output_0
 /layers.0/norm_self_att/Div_output_0
 /layers.0/norm_self_att/Mul_output_0
-/layers.0/norm_self_att/Add_1_output_0
+/layers.0/norm_self_att/Add_1_output_0          OK!
 /layers.0/norm_self_att/Cast_1_output_0
 /layers.0/self_attn/Shape_output_0
 /layers.0/self_attn/Constant_output_0
@@ -389,7 +389,7 @@ onnx::Unsqueeze_1128
 /layers.0/self_attn/Reshape_8_output_0
 /layers.0/self_attn/linear_out/MatMul_output_0
 /layers.0/self_attn/linear_out/Add_output_0
-/layers.0/Add_1_output_0
+/layers.0/Add_1_output_0                        OK! (have small error due to dropout?)
 /layers.0/norm_conv/Cast_output_0
 /layers.0/norm_conv/ReduceMean_output_0
 /layers.0/norm_conv/Sub_output_0
@@ -439,7 +439,7 @@ onnx::Unsqueeze_1128
 /layers.0/conv/activation/Mul_output_0
 /layers.0/conv/pointwise_conv2/Conv_output_0
 /layers.0/conv/Transpose_1_output_0
-/layers.0/Add_2_output_0
+/layers.0/Add_2_output_0                        OK! (note: small error accumulates)
 /layers.0/norm_feed_forward2/Cast_output_0
 /layers.0/norm_feed_forward2/ReduceMean_output_0
 /layers.0/norm_feed_forward2/Sub_output_0

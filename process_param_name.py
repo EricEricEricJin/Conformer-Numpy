@@ -19,8 +19,8 @@ def get_mm_dict(fn):
         mm_dict[f"encoder.layers.{i}"]["feed_forward1.linear2.weight"] = next(mm_iter)
 
         # self attention
-        mm_dict[f"encoder.layers.{i}"]["self_attn.linear_k.weight"] = next(mm_iter)
         mm_dict[f"encoder.layers.{i}"]["self_attn.linear_q.weight"] = next(mm_iter)
+        mm_dict[f"encoder.layers.{i}"]["self_attn.linear_k.weight"] = next(mm_iter)
         mm_dict[f"encoder.layers.{i}"]["self_attn.linear_v.weight"] = next(mm_iter)
         mm_dict[f"encoder.layers.{i}"]["self_attn.linear_pos.weight"] = next(mm_iter)
         mm_dict[f"encoder.layers.{i}"]["self_attn.linear_out.weight"] = next(mm_iter)

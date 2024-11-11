@@ -50,12 +50,27 @@ class ConformerModel:
 
     def __call__(self, x):
         x = self.pre_encoder(x)
+        
+
+        # print("AFTER PRE ENCODER x =")
+        # print(x)
+        # exit()
+        
+        
+        
         for i in range(16):
             x = self.conformer_block_list[i](x)
         print("Before decoder x.shape =", x.shape)
         x = self.decoder(x)
         return x
     
+def load_tokens():
+    ans = dict()
+    with open("tokens.txt", encoding="utf-8") as f:
+        for line in f:
+            sym, idx = line.strip().split()
+            ans[int(idx)] = sym
+    return ans
 
 if __name__ == "__main__":
     from process_param_name import get_mm_dict
@@ -80,3 +95,8 @@ if __name__ == "__main__":
     unique_indexes = [k for k, _ in itertools.groupby(indexes)]
     print(indexes)
     print(unique_indexes)
+
+
+    tokens = load_tokens()
+    text = "".join([tokens[i] for i in unique_indexes if i != 1024])
+    print(text)

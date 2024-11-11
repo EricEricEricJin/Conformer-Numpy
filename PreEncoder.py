@@ -37,6 +37,7 @@ class PreEncoder:
         print("CONV 1.shape =", x.shape)
         print("CONV 1", x)
 
+
         # relu
         x = nn.functional.relu(x)
         print("RELU 1", x)
@@ -61,8 +62,13 @@ class PreEncoder:
         x = x.squeeze()
 
         # matmul and bias
-        x = torch.matmul(x, self.Wbig) + self.bias
+        x = torch.matmul(x, self.Wbig)
+        x = x + self.bias
+        print("LINEAR x =", x)
+        
         x = x * self.scale
+        # print(x)
+        # exit()
 
         return x
 

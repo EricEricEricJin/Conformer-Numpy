@@ -48,8 +48,8 @@ class ConformerBlock:
         self.MHA = MHABlock(beta, gamma, Wq, Bq, Wk, Bk, Wv, Bv, pet, Wp, bias_u, bias_v, sqrt_d, Wo, Bo)
         
         # CONV
-        beta = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_conv.mod.weight.npy")))
-        gamma = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_conv.mod.bias.npy")))
+        beta = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_conv.mod.bias.npy")))
+        gamma = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_conv.mod.weight.npy")))
         Wpt1 = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.conv.pointwise_conv1.weight.npy")))
         Bpt1 = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.conv.pointwise_conv1.bias.npy")))
         Wdp = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.conv.depthwise_conv.weight.npy")))
@@ -70,7 +70,7 @@ class ConformerBlock:
         B1 = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.feed_forward2.linear1.bias.npy")))
         B2 = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.feed_forward2.linear2.bias.npy")))
         self.FF2 = FeedForwardBlock(beta, gamma, W1, B1, W2, B2)
-        
+
         # Norm Out
         self.norm_out_gamma = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_out.mod.weight.npy")))
         self.norm_out_beta = torch.from_numpy(np.load(os.path.join(prefix, f"encoder.layers.{layer}.norm_out.mod.bias.npy")))
@@ -79,13 +79,18 @@ class ConformerBlock:
         print("INPUT", x)
         x = x + self.FF1(x)
         print("FF1", x)
+        
         x = x + self.MHA(x)
         print("MHA", x)
+        
         x = x + self.CONV(x)
         print("CONV", x)
+        
         x = x + self.FF2(x)
         print("FF2", x)
+        
         x = my_layer_norm(x, self.norm_out_gamma, self.norm_out_beta)
+
         return x
 
 if __name__ == "__main__":
